@@ -7,7 +7,7 @@ ENV['RACK_ENV'] = 'test'
 
 module RSpecMixin
   include Rack::Test::Methods
-  def app; OneApp end
+  def app; OneApp::App end
 end
 
 RSpec.configure { |c| c.include RSpecMixin }

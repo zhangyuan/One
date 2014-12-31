@@ -27,6 +27,11 @@ describe "app" do
   end
 
   describe 'POST /jobs' do
+    it 'should be created' do
+      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+      expect(last_response).to be_created
+    end
+
     it 'should create job' do
       post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
 
