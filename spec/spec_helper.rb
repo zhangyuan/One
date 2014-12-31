@@ -1,5 +1,5 @@
-require "rack/test"
-require "rspec"
+require File.expand_path('../../config/boot', __FILE__)
+Bundler.require(:test)
 
 require File.expand_path("../../app.rb", __FILE__)
 
