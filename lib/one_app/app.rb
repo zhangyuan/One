@@ -22,10 +22,13 @@ module OneApp
     end
 
     post '/jobs' do
-      job = MultiJson.decode(request.body.read)
-      JobManager.create(job)
+      JobManager.create(parsed_body['name'], parsed_body['params'])
 
       status 201
+    end
+
+    def parsed_body
+      @parsed_body ||= MultiJson.decode(request.body) 
     end
   end
 end

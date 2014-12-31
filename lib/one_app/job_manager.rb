@@ -8,8 +8,8 @@ module OneApp
       end
     end
 
-    def self.create(options)
-      @ready << Job.new(options).to_json
+    def self.create(name, params)
+      @ready << Job.new(name: name, params: params).to_json
     end
   end
 end
