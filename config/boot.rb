@@ -9,3 +9,4 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "one_app/redis_connection"
 require "one_app/job_manager"
+require "one_app/job"

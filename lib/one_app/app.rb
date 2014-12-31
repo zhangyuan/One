@@ -13,10 +13,8 @@ module OneApp
 
       builder = Jbuilder.new do |json|
         json.array!(jobs) do |job|
-          json.name job['name']
-          json.params do
-            json.id job['params']['id']
-          end
+          json.name job.name
+          json.params job.params
         end
       end
 
