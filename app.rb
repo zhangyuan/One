@@ -1,6 +1,10 @@
 require File.expand_path('../config/boot', __FILE__)
 
 class OneApp < Sinatra::Base
+  before do
+    content_type 'application/json'
+  end
+
   get '/' do
     "hello"
   end

@@ -10,8 +10,13 @@ describe "app" do
 
   describe 'GET /jobs' do
     it 'should be ok' do
-      get '/'
+      get '/jobs'
       expect(last_response).to be_ok
+    end
+
+    it 'should return json' do
+      get '/jobs'
+      expect(last_response.content_type).to eq('application/json')
     end
 
     it 'should return jobs' do
