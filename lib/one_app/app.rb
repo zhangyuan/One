@@ -8,7 +8,7 @@ module OneApp
       "hello"
     end
 
-    get '/jobs' do
+    get '/jobs/ready' do
       jobs = JobManager.ready
 
       builder = Jbuilder.new do |json|

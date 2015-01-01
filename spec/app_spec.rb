@@ -8,19 +8,19 @@ describe "app" do
     end
   end
 
-  describe 'GET /jobs' do
+  describe 'GET /jobs/ready' do
     it 'should be ok' do
-      get '/jobs'
+      get '/jobs/ready'
       expect(last_response).to be_ok
     end
 
     it 'should return json' do
-      get '/jobs'
+      get '/jobs/ready'
       expect(last_response.content_type).to eq('application/json')
     end
 
     it 'should return jobs' do
-      get '/jobs'
+      get '/jobs/ready'
       jobs = MultiJson.decode(last_response.body)
       expect(jobs).to be_instance_of(Array)
     end
@@ -35,7 +35,7 @@ describe "app" do
     it 'should create job' do
       post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
 
-      get '/jobs'
+      get '/jobs/ready'
 
       jobs = MultiJson.decode(last_response.body)
 
