@@ -48,7 +48,7 @@ describe "app" do
 
   describe 'pick up job' do
     
-    describe "when jobs exist" do
+    describe "when one job exist" do
       before(:each) do
         post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
 
@@ -71,6 +71,19 @@ describe "app" do
         get '/jobs/ready'
         jobs = MultiJson.decode(last_response.body)
         expect(jobs.length).to eq(0)
+      end
+    end
+
+    describe "when many jobs exist" do
+      it "should pick up multiple jobs" do
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+
+        get '/jobs/pick?size=2'
+
+        jobs = MultiJson.decode(last_response.body)
+        expect(jobs.length).to eq(2)
       end
     end
 

@@ -12,12 +12,17 @@ module OneApp
       @ready << Job.new(name: name, params: params).to_json
     end
 
-    def self.pick
-      if job = @ready.shift
-        [Job.from_json(job)]
-      else
-        []
+    def self.pick(options = {})
+      size = (options[:size] || 1).to_i
+      jobs = []
+
+      size.times do
+        if json = @ready.shift
+          jobs.push Job.from_json(json)
+        end
       end
+
+      jobs
     end
   end
 end

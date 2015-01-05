@@ -27,7 +27,11 @@ module OneApp
     end
 
     get '/jobs/pick' do
-      jobs = JobManager.pick
+      options = {}
+      if params['size'].to_i > 0
+        options[:size] = params['size']
+      end
+      jobs = JobManager.pick(options)
 
       builder = Jbuilder.new do |json|
         json.array!(jobs) do |job|
