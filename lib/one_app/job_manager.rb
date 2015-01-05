@@ -1,6 +1,7 @@
 module OneApp
   class JobManager
     @ready = Redis::List.new('job:ready')
+    @pending = Redis::SortedSet.new("job:pending")
 
     def self.ready(limit = 1, offset = 0)
       @ready.range(offset, offset + limit).map do |item|
@@ -19,10 +20,17 @@ module OneApp
       size.times do
         if json = @ready.shift
           jobs.push Job.from_json(json)
+          @pending[json] = Time.now.to_i
         end
       end
 
       jobs
+    end
+
+    def self.pending
+      @pending.rangebyscore('-inf', '+inf').map do |json|
+        Job.from_json(json)
+      end
     end
   end
 end

@@ -43,6 +43,18 @@ module OneApp
       builder.target!
     end
 
+    get '/jobs/pending' do
+      jobs = JobManager.pending
+      builder = Jbuilder.new do |json|
+        json.array!(jobs) do |job|
+          json.name job.name 
+          json.params job.params
+        end
+      end
+
+      builder.target!
+    end
+
     def parsed_body
       @parsed_body ||= MultiJson.decode(request.body) 
     end
