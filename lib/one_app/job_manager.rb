@@ -11,5 +11,13 @@ module OneApp
     def self.create(name, params)
       @ready << Job.new(name: name, params: params).to_json
     end
+
+    def self.pick
+      if job = @ready.shift
+        [Job.from_json(job)]
+      else
+        []
+      end
+    end
   end
 end

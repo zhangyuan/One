@@ -23,8 +23,20 @@ module OneApp
 
     post '/jobs' do
       JobManager.create(parsed_body['name'], parsed_body['params'])
-
       status 201
+    end
+
+    get '/jobs/pick' do
+      jobs = JobManager.pick
+
+      builder = Jbuilder.new do |json|
+        json.array!(jobs) do |job|
+          json.name job.name
+          json.params job.params
+        end
+      end
+
+      builder.target!
     end
 
     def parsed_body

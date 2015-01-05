@@ -45,4 +45,41 @@ describe "app" do
       expect(jobs[0]['params']).to eq({'id' => 1})
     end
   end
+
+  describe 'pick up job' do
+    
+    describe "when jobs exist" do
+      before(:each) do
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+
+        get '/jobs/pick'
+      end
+
+      it 'should be ok' do
+        expect(last_response).to be_ok
+      end
+
+      it 'should pick up job' do
+        jobs = MultiJson.decode(last_response.body)
+        expect(jobs).to be_instance_of(Array)
+        expect(jobs.length).to eq(1)
+        expect(jobs[0]['name']).to eq('jobs/name')
+        expect(jobs[0]['params']).to eq({'id' => 1})
+      end
+
+      it 'remove the job from ready' do
+        get '/jobs/ready'
+        jobs = MultiJson.decode(last_response.body)
+        expect(jobs.length).to eq(0)
+      end
+    end
+
+    describe "when no job exists" do
+      it "should pick blank list" do
+        get '/jobs/pick'
+        jobs = MultiJson.decode(last_response.body)
+        expect(jobs.length).to eq(0)
+      end
+    end
+  end
 end
