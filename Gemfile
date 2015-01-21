@@ -7,6 +7,7 @@ gem 'jbuilder'
 gem 'redis-objects'
 
 group :test do
+  gem 'rake'
   gem 'rspec'
   gem 'rack-test'
   gem "fakeredis", require: "fakeredis/rspec"
