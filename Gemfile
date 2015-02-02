@@ -10,6 +10,7 @@ group :test do
   gem 'rake'
   gem 'rspec'
   gem 'rack-test'
+  gem 'timecop'
   gem "fakeredis", require: "fakeredis/rspec"
 end
 

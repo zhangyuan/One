@@ -17,7 +17,7 @@ module OneApp
       size = (options[:size] || 1).to_i
       jobs = []
 
-      expires_at = Time.now.to_i + 6000
+      expires_at = Time.now.to_i + 600_000
 
       size.times do
         if json = @ready.shift

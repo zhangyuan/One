@@ -52,7 +52,13 @@ describe "app" do
       before(:each) do
         post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
 
+        Timecop.freeze Time.local(2015, 1, 1, 12, 0, 0)
+
         get '/jobs/pick'
+      end
+
+      after(:each) do
+        Timecop.return
       end
 
       it 'should be ok' do
@@ -78,6 +84,12 @@ describe "app" do
         expect(jobs[0]['expires_at']).to be_instance_of(Fixnum)
       end
 
+      it 'should expire at 10 minutes later' do
+        jobs = MultiJson.decode(last_response.body)
+        expected_expires_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 600_000
+        expect(jobs[0]['expires_at']).to eq(expected_expires_at)
+      end
+
       it 'should appear in pending jobs' do
         get '/jobs/pending'
 
@@ -87,6 +99,7 @@ describe "app" do
         expect(jobs[0]['name']).to eq('jobs/name')
         expect(jobs[0]['params']).to eq({'id' => 1})
       end
+
 
     end
 
