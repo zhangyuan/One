@@ -37,9 +37,9 @@ module OneApp
         json.array!(jobs) do |job|
           json.name job.name
           json.params job.params
+          json.expires_at job.expires_at
         end
       end
-
       builder.target!
     end
 

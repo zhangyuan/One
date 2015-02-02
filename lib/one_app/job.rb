@@ -1,6 +1,6 @@
 module OneApp
   class Job
-    attr_accessor :name, :params
+    attr_accessor :name, :params, :expires_at
 
     def initialize(attrs)
       self.name = attrs[:name] || attrs['name']   
@@ -10,7 +10,8 @@ module OneApp
     def to_json
       attrs = {
         name: name,
-        params: params
+        params: params,
+        expires_at: expires_at
       } 
       MultiJson.encode(attrs)
     end

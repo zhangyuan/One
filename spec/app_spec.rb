@@ -73,6 +73,11 @@ describe "app" do
         expect(jobs.length).to eq(0)
       end
 
+      it 'should return expires_at' do
+        jobs = MultiJson.decode(last_response.body)
+        expect(jobs[0]['expires_at']).to be_instance_of(Fixnum)
+      end
+
       it 'should appear in pending jobs' do
         get '/jobs/pending'
 
@@ -82,6 +87,7 @@ describe "app" do
         expect(jobs[0]['name']).to eq('jobs/name')
         expect(jobs[0]['params']).to eq({'id' => 1})
       end
+
     end
 
     describe "when many jobs exist" do
