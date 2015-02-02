@@ -46,7 +46,7 @@ describe "app" do
     end
   end
 
-  describe 'pick up job' do
+  describe 'GET /jobs/pick' do
     
     describe "when one job exist" do
       before(:each) do
