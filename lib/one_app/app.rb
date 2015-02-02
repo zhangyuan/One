@@ -15,6 +15,7 @@ module OneApp
         json.array!(jobs) do |job|
           json.name job.name
           json.params job.params
+          json.created_at job.created_at
         end
       end
 
@@ -38,6 +39,7 @@ module OneApp
           json.name job.name
           json.params job.params
           json.expires_at job.expires_at
+          json.created_at job.created_at
         end
       end
       builder.target!

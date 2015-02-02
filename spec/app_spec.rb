@@ -27,6 +27,10 @@ describe "app" do
   end
 
   describe 'POST /jobs' do
+    before(:each) do
+      Timecop.freeze Time.local(2015, 1, 1, 12, 0, 0)
+    end
+
     it 'should be created' do
       post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
       expect(last_response).to be_created
@@ -43,6 +47,7 @@ describe "app" do
       expect(jobs.length).to eq(1)
       expect(jobs[0]['name']).to eq('jobs/name')
       expect(jobs[0]['params']).to eq({'id' => 1})
+      expect(jobs[0]['created_at']).to eq(Time.local(2015, 1, 1, 12, 0, 0).to_i)
     end
   end
 
@@ -99,8 +104,6 @@ describe "app" do
         expect(jobs[0]['name']).to eq('jobs/name')
         expect(jobs[0]['params']).to eq({'id' => 1})
       end
-
-
     end
 
     describe "when many jobs exist" do

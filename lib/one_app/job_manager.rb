@@ -10,7 +10,7 @@ module OneApp
     end
 
     def self.create(name, params)
-      @ready << Job.new(name: name, params: params).to_json
+      @ready << Job.new(name: name, params: params, created_at: Time.now.to_i).to_json
     end
 
     def self.pick(options = {})
