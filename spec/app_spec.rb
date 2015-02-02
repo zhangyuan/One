@@ -105,4 +105,28 @@ describe "app" do
       end
     end
   end
+
+  describe 'POST /jobs/finish' do
+    before(:each) do
+      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+      get '/jobs/pick'
+      jobs = MultiJson.decode(last_response.body)
+      post '/jobs/finish', MultiJson.encode(jobs)
+    end
+
+    it 'should be ok' do
+      expect(last_response).to be_ok
+    end
+
+    it 'should remove job from pending' do
+      get '/jobs/pick'
+      jobs = MultiJson.decode(last_response.body)
+
+      post '/jobs/finish', MultiJson.encode(jobs)
+
+      get '/jobs/pending'
+      jobs = MultiJson.decode(last_response.body)
+      expect(jobs.length).to eq(0)
+    end
+  end
 end

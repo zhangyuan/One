@@ -27,6 +27,10 @@ module OneApp
       jobs
     end
 
+    def self.delete(hash)
+      @pending.delete(MultiJson.encode(hash))
+    end
+
     def self.pending
       @pending.rangebyscore('-inf', '+inf').map do |json|
         Job.from_json(json)

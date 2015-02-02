@@ -55,6 +55,20 @@ module OneApp
       builder.target!
     end
 
+    post '/jobs/finish' do
+      parsed_body.each do |job|
+        JobManager.delete(job)
+      end
+
+      builder = Jbuilder.new do |json|
+        json.status 0
+      end
+
+      builder.target!
+    end
+
+    protected
+    
     def parsed_body
       @parsed_body ||= MultiJson.decode(request.body) 
     end
