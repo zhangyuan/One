@@ -86,7 +86,7 @@ describe "app" do
 
       it 'should return expires_at' do
         jobs = MultiJson.decode(last_response.body)
-        expect(jobs[0]['expires_at']).to be_instance_of(Fixnum)
+        expect(jobs[0]['expires_at']).to be_a(Integer)
       end
 
       it 'should expire at 10 minutes later' do
