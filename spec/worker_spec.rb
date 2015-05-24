@@ -3,8 +3,8 @@ require File.expand_path("../spec_helper", __FILE__)
 describe 'worker' do
   before(:each) do
     Timecop.freeze Time.local(2015, 1, 1, 12, 0, 0)
-    post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
-    get '/jobs/pick'
+    post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
+    get '/jobs/pick', nil, 'X-OneApp-Application-Key' => 'OneApp'
   end
 
   after(:each) do
@@ -16,7 +16,7 @@ describe 'worker' do
     worker = OneApp::Worker.new
     worker.run
 
-    get '/jobs/ready'
+    get '/jobs/ready', nil, 'X-OneApp-Application-Key' => 'OneApp'
     jobs = MultiJson.decode(last_response.body)
 
     expect(jobs.length).to eq(1)

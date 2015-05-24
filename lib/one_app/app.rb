@@ -3,8 +3,12 @@ module OneApp
     attr_accessor :manager
 
     before do
-      content_type 'application/json'
-      self.manager = JobManager.new
+      if request.env['X-OneApp-Application-Key'] != 'OneApp'
+        halt 403
+      else
+        content_type 'application/json'
+        self.manager = JobManager.new  
+      end
     end
 
     get '/' do

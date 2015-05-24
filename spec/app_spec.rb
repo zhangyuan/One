@@ -6,25 +6,35 @@ describe "app" do
   end
 
   describe 'GET /' do
-    it 'should be ok' do
+    it 'should return 403 if app key is valid' do
       get '/'
+      expect(last_response).to be_forbidden
+    end
+
+    it 'should be ok' do
+      get '/', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       expect(last_response).to be_ok
     end
   end
 
   describe 'GET /jobs/ready' do
+    it 'should check app key' do
+      get 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+      expect(last_response).to be_forbidden
+    end
+
     it 'should be ok' do
-      get '/jobs/ready'
+      get '/jobs/ready', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       expect(last_response).to be_ok
     end
 
     it 'should return json' do
-      get '/jobs/ready'
+      get '/jobs/ready', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       expect(last_response.content_type).to eq('application/json')
     end
 
     it 'should return jobs' do
-      get '/jobs/ready'
+      get '/jobs/ready', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       jobs = MultiJson.decode(last_response.body)
       expect(jobs).to be_instance_of(Array)
     end
@@ -35,15 +45,20 @@ describe "app" do
       Timecop.freeze Time.local(2015, 1, 1, 12, 0, 0)
     end
 
-    it 'should be created' do
+    it 'should check app key' do
       post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+      expect(last_response).to be_forbidden
+    end
+
+    it 'should be created' do
+      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
       expect(last_response).to be_created
     end
 
     it 'should create job' do
-      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json',  'X-OneApp-Application-Key' => 'OneApp'}
 
-      get '/jobs/ready'
+      get '/jobs/ready', nil, {'X-OneApp-Application-Key' => 'OneApp'}
 
       jobs = MultiJson.decode(last_response.body)
 
@@ -60,9 +75,14 @@ describe "app" do
     describe "when one job exist" do
       before(:each) do
         Timecop.freeze Time.local(2015, 1, 1, 12, 0, 0)
-        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
 
+        get '/jobs/pick', nil, {'X-OneApp-Application-Key' => 'OneApp'}
+      end
+
+      it 'should check app key' do
         get '/jobs/pick'
+        expect(last_response).to be_forbidden
       end
 
       it 'should be ok' do
@@ -78,7 +98,7 @@ describe "app" do
       end
 
       it 'remove the job from ready' do
-        get '/jobs/ready'
+        get '/jobs/ready', nil, {'X-OneApp-Application-Key' => 'OneApp'}
         jobs = MultiJson.decode(last_response.body)
         expect(jobs.length).to eq(0)
       end
@@ -95,7 +115,7 @@ describe "app" do
       end
 
       it 'should appear in pending jobs' do
-        get '/jobs/pending'
+        get '/jobs/pending', nil, {'X-OneApp-Application-Key' => 'OneApp'}
 
         jobs = MultiJson.decode(last_response.body)
         expect(jobs).to be_instance_of(Array)
@@ -110,11 +130,11 @@ describe "app" do
 
     describe "when many jobs exist" do
       it "should pick up multiple jobs" do
-        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
-        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
-        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
 
-        get '/jobs/pick?size=2'
+        get '/jobs/pick?size=2', nil, {'X-OneApp-Application-Key' => 'OneApp'}
 
         jobs = MultiJson.decode(last_response.body)
         expect(jobs.length).to eq(2)
@@ -123,7 +143,7 @@ describe "app" do
 
     describe "when no job exists" do
       it "should pick blank list" do
-        get '/jobs/pick'
+        get '/jobs/pick', nil, {'X-OneApp-Application-Key' => 'OneApp'}
         jobs = MultiJson.decode(last_response.body)
         expect(jobs.length).to eq(0)
       end
@@ -132,10 +152,11 @@ describe "app" do
 
   describe 'POST /jobs/finish' do
     before(:each) do
-      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
-      get '/jobs/pick'
+      post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json', 'X-OneApp-Application-Key' => 'OneApp'}
+      get '/jobs/pick', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       jobs = MultiJson.decode(last_response.body)
-      post '/jobs/finish', MultiJson.encode(jobs)
+
+      post '/jobs/finish', MultiJson.encode(jobs), 'X-OneApp-Application-Key' => 'OneApp'
     end
 
     it 'should be ok' do
@@ -143,12 +164,12 @@ describe "app" do
     end
 
     it 'should remove job from pending' do
-      get '/jobs/pick'
+      get '/jobs/pick', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       jobs = MultiJson.decode(last_response.body)
 
       post '/jobs/finish', MultiJson.encode(jobs)
 
-      get '/jobs/pending'
+      get '/jobs/pending', nil, {'X-OneApp-Application-Key' => 'OneApp'}
       jobs = MultiJson.decode(last_response.body)
       expect(jobs.length).to eq(0)
     end
