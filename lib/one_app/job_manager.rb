@@ -43,9 +43,10 @@ module OneApp
       end
     end
 
-    def retry_expired
+    def retry_expired(options = {})
+      limit = options[:limit] || 10
       score = Time.now.to_i
-      @pending_set.rangebyscore('-inf', score, limit: 100, offset: 0).each do |j|
+      @pending_set.rangebyscore('-inf', score, limit: limit, offset: 0).each do |j|
         job = Job.from_json(j)
         job.retry_times += 1
         create(job)

@@ -3,8 +3,8 @@ module OneApp
     def initialize
       @manager = JobManager.new 
     end
-    def run
-      @manager.retry_expired 
+    def run(options = {})
+      @manager.retry_expired(options)
     end    
   end
 end
