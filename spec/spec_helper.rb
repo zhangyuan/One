@@ -9,7 +9,7 @@ module RSpecMixin
   include Rack::Test::Methods
   def app 
     OneApp::App.set :root, File.expand_path('../../', __FILE__)
-    OneApp::App 
+    OneApp::App.set :one_config, OneApp::Config.new('api_key' => 'OneApp')
   end
 end
 
