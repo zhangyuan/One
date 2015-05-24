@@ -19,14 +19,14 @@ module OneApp
       size = (options[:size] || 1).to_i
       jobs = []
 
-      expires_at = Time.now.to_i + 10 * 60
+      timeout_at = Time.now.to_i + 10 * 60
 
       size.times do
         if json = @ready_list.shift
           job = Job.from_json(json)
-          job.expires_at = expires_at
+          job.timeout_at = timeout_at
           jobs << job
-          @pending_set[job.to_json] = expires_at
+          @pending_set[job.to_json] = timeout_at
         end
       end
 

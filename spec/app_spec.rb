@@ -103,15 +103,15 @@ describe "app" do
         expect(jobs.length).to eq(0)
       end
 
-      it 'should return expires_at' do
+      it 'should return timeout_at' do
         jobs = MultiJson.decode(last_response.body)
-        expect(jobs[0]['expires_at']).to be_a(Integer)
+        expect(jobs[0]['timeout_at']).to be_a(Integer)
       end
 
       it 'should expire at 10 minutes later' do
         jobs = MultiJson.decode(last_response.body)
-        expected_expires_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 10 * 60
-        expect(jobs[0]['expires_at']).to eq(expected_expires_at)
+        expected_timeout_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 10 * 60
+        expect(jobs[0]['timeout_at']).to eq(expected_timeout_at)
       end
 
       it 'should appear in pending jobs' do
@@ -123,8 +123,8 @@ describe "app" do
         expect(jobs[0]['name']).to eq('jobs/name')
         expect(jobs[0]['params']).to eq({'id' => 1})
         expect(jobs[0]['created_at']).to eq(Time.local(2015, 1, 1, 12, 0, 0).to_i)
-        expected_expires_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 10 * 60
-        expect(jobs[0]['expires_at']).to eq(expected_expires_at.to_i)
+        expected_timeout_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 10 * 60
+        expect(jobs[0]['timeout_at']).to eq(expected_timeout_at.to_i)
       end
     end
 
