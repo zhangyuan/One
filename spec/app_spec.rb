@@ -1,6 +1,10 @@
 require File.expand_path("../spec_helper", __FILE__)
 
 describe "app" do
+  after(:each) do
+    Timecop.return
+  end
+
   describe 'GET /' do
     it 'should be ok' do
       get '/'
@@ -48,11 +52,11 @@ describe "app" do
       expect(jobs[0]['name']).to eq('jobs/name')
       expect(jobs[0]['params']).to eq({'id' => 1})
       expect(jobs[0]['created_at']).to eq(Time.local(2015, 1, 1, 12, 0, 0).to_i)
+      expect(jobs[0]['retry_times']).to eq(0)
     end
   end
 
   describe 'GET /jobs/pick' do
-    
     describe "when one job exist" do
       before(:each) do
         post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
@@ -62,11 +66,7 @@ describe "app" do
         get '/jobs/pick'
       end
 
-      after(:each) do
-        Timecop.return
-      end
-
-      it 'should be ok' do
+          it 'should be ok' do
         expect(last_response).to be_ok
       end
 

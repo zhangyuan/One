@@ -19,6 +19,7 @@ module OneApp
           json.name job.name
           json.params job.params
           json.created_at job.created_at
+          json.retry_times job.retry_times
         end
       end
 
@@ -43,6 +44,7 @@ module OneApp
           json.params job.params
           json.expires_at job.expires_at
           json.created_at job.created_at
+          json.retry_times job.retry_times
         end
       end
       builder.target!

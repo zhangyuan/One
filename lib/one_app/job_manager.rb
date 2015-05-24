@@ -51,6 +51,7 @@ module OneApp
       score = Time.now.to_i
       @pending_set.rangebyscore('-inf', score, limit: 100, offset: 0).each do |j|
         job = Job.from_json(j)
+        job.retry_times += 1
         create(job)
       end
     end
