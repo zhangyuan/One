@@ -6,10 +6,9 @@ module OneApp
 
     before do
       path = File.join(settings.root, 'config', 'application.yml')
-
       one_config = OneApp::Config.new YAML.parse_file(path).to_ruby
 
-      if request.env['X-OneApp-Application-Key'] != one_config.api_key
+      if request.env['HTTP_X_ONEAPP_APPLICATION_KEY'] != one_config.api_key
         halt 403
       else
         content_type 'application/json'
