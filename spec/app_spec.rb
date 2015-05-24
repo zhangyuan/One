@@ -91,7 +91,7 @@ describe "app" do
 
       it 'should expire at 10 minutes later' do
         jobs = MultiJson.decode(last_response.body)
-        expected_expires_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 600_000
+        expected_expires_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 10 * 60
         expect(jobs[0]['expires_at']).to eq(expected_expires_at)
       end
 

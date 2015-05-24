@@ -9,11 +9,7 @@ module OneApp
       end
     end
 
-    def self.create(name, params)
-      @ready << Job.new(name: name, params: params, created_at: Time.now.to_i).to_json
-    end
-
-    def self.create_job(job)
+    def self.create(job)
       @ready << job.to_json 
     end
 
@@ -49,7 +45,7 @@ module OneApp
       score = Time.now.to_i
       @pending.rangebyscore('-inf', score, limit: 100, offset: 0).each do |j|
         job = Job.from_json(j)
-        create_job(job)
+        create(job)
       end
     end
   end

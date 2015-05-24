@@ -23,7 +23,7 @@ module OneApp
     end
 
     post '/jobs' do
-      JobManager.create(parsed_body['name'], parsed_body['params'])
+      JobManager.create  Job.new(name: parsed_body['name'], params: parsed_body['params'], created_at: Time.now.to_i)
       status 201
     end
 
