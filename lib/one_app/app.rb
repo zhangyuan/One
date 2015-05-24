@@ -12,7 +12,6 @@ module OneApp
     end
 
     get '/jobs/ready' do
-      puts ">>> #{manager.ready}" 
       jobs = manager.ready
 
       builder = Jbuilder.new do |json|
