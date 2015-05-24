@@ -59,14 +59,13 @@ describe "app" do
   describe 'GET /jobs/pick' do
     describe "when one job exist" do
       before(:each) do
-        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
-
         Timecop.freeze Time.local(2015, 1, 1, 12, 0, 0)
+        post 'jobs', MultiJson.encode({name: "jobs/name", params: {id: 1}}), {'Content-Type' => 'application/json'}
 
         get '/jobs/pick'
       end
 
-          it 'should be ok' do
+      it 'should be ok' do
         expect(last_response).to be_ok
       end
 
@@ -103,6 +102,9 @@ describe "app" do
         expect(jobs.length).to eq(1)
         expect(jobs[0]['name']).to eq('jobs/name')
         expect(jobs[0]['params']).to eq({'id' => 1})
+        expect(jobs[0]['created_at']).to eq(Time.local(2015, 1, 1, 12, 0, 0).to_i)
+        expected_expires_at = Time.local(2015, 1, 1, 12, 0, 0).to_i + 10 * 60
+        expect(jobs[0]['expires_at']).to eq(expected_expires_at.to_i)
       end
     end
 

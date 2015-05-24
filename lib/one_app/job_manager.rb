@@ -5,10 +5,6 @@ module OneApp
       @pending_set = Redis::SortedSet.new("job:pending")
     end
 
-    def pending
-      @pending_set
-    end
-
     def ready(limit = 1, offset = 0)
       @ready_list.range(offset, offset + limit).map do |item|
         Job.from_json(item)

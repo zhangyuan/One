@@ -6,6 +6,7 @@ module OneApp
       self.name = attrs[:name] || attrs['name']   
       self.params = attrs[:params] || attrs['params']
       self.created_at = attrs[:created_at] || attrs['created_at']
+      self.expires_at = attrs[:expires_at] || attrs['expires_at']
       self.retry_times = attrs[:retry_times] || attrs['retry_times'] || 0
     end
 
