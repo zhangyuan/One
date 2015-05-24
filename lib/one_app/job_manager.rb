@@ -13,11 +13,15 @@ module OneApp
       @ready << Job.new(name: name, params: params, created_at: Time.now.to_i).to_json
     end
 
+    def self.create_job(job)
+      @ready << job.to_json 
+    end
+
     def self.pick(options = {})
       size = (options[:size] || 1).to_i
       jobs = []
 
-      expires_at = Time.now.to_i + 600_000
+      expires_at = Time.now.to_i + 10 * 60
 
       size.times do
         if json = @ready.shift
@@ -38,6 +42,14 @@ module OneApp
     def self.pending
       @pending.rangebyscore('-inf', '+inf').map do |json|
         Job.from_json(json)
+      end
+    end
+
+    def self.retry_expired
+      score = Time.now.to_i
+      @pending.rangebyscore('-inf', score, limit: 100, offset: 0).each do |j|
+        job = Job.from_json(j)
+        create_job(job)
       end
     end
   end
