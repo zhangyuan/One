@@ -1,7 +1,10 @@
 module OneApp
   class Worker
+    def initialize
+      @manager = JobManager.new 
+    end
     def run
-      JobManager.retry_expired 
+      @manager.retry_expired 
     end    
   end
 end

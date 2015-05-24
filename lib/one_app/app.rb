@@ -1,7 +1,10 @@
 module OneApp
   class App < Sinatra::Base
+    attr_accessor :manager
+
     before do
       content_type 'application/json'
+      self.manager = JobManager.new
     end
 
     get '/' do
@@ -9,7 +12,8 @@ module OneApp
     end
 
     get '/jobs/ready' do
-      jobs = JobManager.ready
+      puts ">>> #{manager.ready}" 
+      jobs = manager.ready
 
       builder = Jbuilder.new do |json|
         json.array!(jobs) do |job|
@@ -23,7 +27,7 @@ module OneApp
     end
 
     post '/jobs' do
-      JobManager.create  Job.new(name: parsed_body['name'], params: parsed_body['params'], created_at: Time.now.to_i)
+      manager.create  Job.new(name: parsed_body['name'], params: parsed_body['params'], created_at: Time.now.to_i)
       status 201
     end
 
@@ -32,7 +36,7 @@ module OneApp
       if params['size'].to_i > 0
         options[:size] = params['size']
       end
-      jobs = JobManager.pick(options)
+      jobs = manager.pick(options)
 
       builder = Jbuilder.new do |json|
         json.array!(jobs) do |job|
@@ -46,7 +50,7 @@ module OneApp
     end
 
     get '/jobs/pending' do
-      jobs = JobManager.pending
+      jobs = manager.pending
       builder = Jbuilder.new do |json|
         json.array!(jobs) do |job|
           json.name job.name 
@@ -59,7 +63,7 @@ module OneApp
 
     post '/jobs/finish' do
       parsed_body.each do |job|
-        JobManager.delete(job)
+        manager.delete(job)
       end
 
       builder = Jbuilder.new do |json|
