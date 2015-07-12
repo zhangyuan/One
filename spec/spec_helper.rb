@@ -5,6 +5,8 @@ require File.expand_path("../../app.rb", __FILE__)
 
 ENV['RACK_ENV'] = 'test'
 
+Redis::Objects.redis = Redis.new
+
 module RSpecMixin
   include Rack::Test::Methods
   def app 

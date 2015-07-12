@@ -5,6 +5,7 @@ gem 'sinatra'
 gem 'multi_json'
 gem 'jbuilder'
 gem 'redis-objects'
+gem 'connection_pool'
 
 group :test do
   gem 'rake'
