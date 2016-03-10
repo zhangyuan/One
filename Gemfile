@@ -15,3 +15,4 @@ group :test do
   gem "fakeredis", require: "fakeredis/rspec"
 end
 
+gem 'codecov', :require => false, :group => :test
