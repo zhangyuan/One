@@ -7,6 +7,7 @@ gem 'jbuilder'
 gem 'redis-objects'
 gem 'connection_pool'
 
+
 group :test do
   gem 'rake'
   gem 'rspec'
@@ -16,3 +17,4 @@ group :test do
 end
 
 gem 'codecov', :require => false, :group => :test
+gem "codeclimate-test-reporter", group: :test, require: nil
