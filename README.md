@@ -5,7 +5,7 @@ One
 
 [![Build Status](https://snap-ci.com/zhangyuan/One/branch/master/build_image)](https://snap-ci.com/zhangyuan/One/branch/master)
 
-[![Test Coverage](https://codeclimate.com/github/zhangyuan/One/badges/coverage.svg)](https://codeclimate.com/github/zhangyuan/One/coverage)
+[![Code Climate](https://codeclimate.com/github/zhangyuan/One/badges/gpa.svg)](https://codeclimate.com/github/zhangyuan/One)
 
 [![codecov.io](https://codecov.io/github/zhangyuan/One/coverage.svg?branch=master)](https://codecov.io/github/zhangyuan/One?branch=master)
 
